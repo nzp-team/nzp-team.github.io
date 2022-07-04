@@ -1,0 +1,52 @@
+name: Update WebGL Build
+on:
+    schedule:
+    - cron: 0 7 * * *
+    workflow_dispatch:
+
+jobs:
+    Do-The-Thing:
+        runs-on: ubuntu-latest
+        container:
+            image: sharkwouter/pspdev
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                ref: ${{ github.head_ref }}
+            - name: Get apt ready
+              run: |
+                apt update
+                apt install -y zip unzip wget curl git jq bash
+            - name: Download assets
+              run: |
+                git config --global --add safe.directory $GITHUB_WORKSPACE
+                cd $GITHUB_WORKSPACE
+                wget -nc https://github.com/nzp-team/fteqw/releases/download/bleeding-edge/pc-nzp-web.zip
+                wget -nc https://github.com/nzp-team/assets/releases/download/newest/pc-nzp-assets.zip
+            - name: Create .PK3
+              run: |
+                cd $GITHUB_WORKSPACE
+                mkdir tmp
+                unzip -q pc-nzp-assets.zip -d tmp/
+                cd tmp/nzp/
+                zip -r ../../latest/nzp/game.pk3 ./*
+            - name: Replace WebAssembly file
+              run: |
+                cd $GITHUB_WORKSPACE
+                unzip -q pc-nzp-web.zip -d tmp/
+                mv tmp/ftewebgl.wasm latest/
+            - name: Trash stuff
+              run: |
+                cd $GITHUB_WORKSPACE
+                rm -rf tmp/
+                rm pc-nzp-web.zip
+                rm pc-nzp-assets.zip
+            - name: Commit and Push
+              uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                commit_message: Update NZ:P
+                branch: main
+                commit_user_name: Awesome NZ:P Updater Bot
+                commit_user_email: nope@example.org
+
+
