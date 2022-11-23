@@ -28,6 +28,7 @@ jobs:
             - name: Create .PK3
               run: |
                 cd $GITHUB_WORKSPACE
+                rm latest/nzp/game.pk3
                 mkdir tmp
                 unzip -q pc-nzp-assets.zip -d tmp/
                 unzip -q pc-nzp-qc.zip -d tmp/nzp/
@@ -45,6 +46,7 @@ jobs:
                 rm -rf tmp/
                 rm pc-nzp-web.zip
                 rm pc-nzp-assets.zip
+                rm pc-nzp-qc.zip
             - name: Commit and Push
               uses: stefanzweifel/git-auto-commit-action@v4
               with:
