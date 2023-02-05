@@ -35,11 +35,12 @@ jobs:
                 mv build-version.txt tmp/nzp/version.txt
                 cd tmp/nzp/
                 zip -r ../../latest/nzp/game.pk3 ./*
-            - name: Replace WebAssembly file
+            - name: Replace WebAssembly files
               run: |
                 cd $GITHUB_WORKSPACE
                 unzip -q pc-nzp-web.zip -d tmp/
                 mv tmp/ftewebgl.wasm latest/
+                mv tmp/ftewebgl.js latest/
             - name: Trash stuff
               run: |
                 cd $GITHUB_WORKSPACE
