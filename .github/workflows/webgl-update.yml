@@ -16,7 +16,7 @@ jobs:
             - name: Get apt ready
               run: |
                 apt update
-                apt install -y zip unzip wget curl git jq bash
+                apt install -y zip unzip wget curl git jq bash ffmpeg
             - name: Download assets
               run: |
                 git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -33,7 +33,10 @@ jobs:
                 unzip -q pc-nzp-assets.zip -d tmp/
                 unzip -q fte-nzp-qc.zip -d tmp/nzp/
                 mv build-version.txt tmp/nzp/version.txt
-                cd tmp/nzp/
+                cd tmp/nzp/tracks
+                find . -name '*.ogg' -exec bash -c 'ffmpeg -i $1 -acodec pcm_u8 -ar 16000 ${1%.*}.wav' -- {} \;
+                rm *.ogg
+                cd ../
                 zip -r ../../nzp/game.pk3 ./*
             - name: Replace WebAssembly files
               run: |
@@ -55,5 +58,3 @@ jobs:
                 branch: main
                 commit_user_name: Awesome NZ:P Updater Bot
                 commit_user_email: nope@example.org
-
-
