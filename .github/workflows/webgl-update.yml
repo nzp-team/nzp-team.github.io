@@ -28,16 +28,19 @@ jobs:
             - name: Create .PK3
               run: |
                 cd $GITHUB_WORKSPACE
-                rm nzp/game.pk3
+                rm nzp/*.pk3
                 mkdir tmp
                 unzip -q pc-nzp-assets.zip -d tmp/
-                unzip -q fte-nzp-qc.zip -d tmp/nzp/
                 mv build-version.txt tmp/nzp/version.txt
                 cd tmp/nzp/tracks
                 find . -name '*.ogg' -exec bash -c 'ffmpeg -i $1 -acodec pcm_u8 -ar 16000 ${1%.*}.wav' -- {} \;
                 rm *.ogg
                 cd ../
                 zip -r ../../nzp/game.pk3 ./*
+                cd ../../
+                unzip -q fte-nzp-qc.zip -d tmp/nzp
+                cd tmp/nzp
+                zip -r ../../nzp/progs.pk3 ./*.dat ./*.lno
             - name: Replace WebAssembly files
               run: |
                 cd $GITHUB_WORKSPACE
