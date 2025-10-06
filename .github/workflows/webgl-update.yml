@@ -61,3 +61,5 @@ jobs:
                 branch: main
                 commit_user_name: Awesome NZ:P Updater Bot
                 commit_user_email: nope@example.org
+- name: Fork Sync
+  uses: tgymnich/fork-sync@v2.0.10
