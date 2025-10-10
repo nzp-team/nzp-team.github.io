@@ -1,0 +1,20 @@
+name: Sync Fork Upstream
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # every day 8am
+  workflow_dispatch: # on button click
+
+jobs:
+  sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: AbdulmelikKalkan/sync-fork-upstream@v1.3
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          owner: repo_owner
+          repo: repo_name
+          branch: branch_name
