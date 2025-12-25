@@ -34,6 +34,8 @@ jobs:
                 mv build-version.txt tmp/nzp/version.txt
                 cd tmp/nzp/tracks
                 find . -name '*.ogg' -exec bash -c 'ffmpeg -i $1 -acodec pcm_u8 -ar 16000 ${1%.*}.wav' -- {} \;
+                find . -name "*.mp3" -type f -delete
+                find . -name "*.ogg" -type f -delete
                 rm *.ogg
                 cd ../
                 zip -r ../../nzp/game.pk3 ./*
